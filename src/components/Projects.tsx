@@ -123,10 +123,9 @@ export const Projects: React.FC = () => {
       tagline: "AI-driven placement platform matching resumes to opportunities.",
       description:
         "Orchestrated a semantic translation and ranking engine powered by Python ML microservices, MiniLM-L12 encoders, and job application tracking.",
-      tags: ["React.js", "Node.js", "Python", "MiniLM-L12", "Vector Search", "Express", "OTP Module"],
+      tags: ["React.js", "Node.js", "Python", "MiniLM-L12", "Express", "OTP Module"],
       features: [
         "Semantic matching matching resumes to job details with cosine similarity",
-        "Python Flask microservice hosting vector transformers for similarity metrics",
         "Two-factor verification via Nodemailer email OTP verification modules",
         "Unified dashboard tracking active applicant statuses and review flows",
       ],
@@ -155,8 +154,7 @@ export const Projects: React.FC = () => {
         architecture:
           "Split into a Node/Express backend representing the business controller and client authentication endpoints, and a python backend running SentenceTransformers. Communication between layers runs via REST endpoints.",
         challenges: [
-          "Text embedding translation delays: Standardized on MiniLM-L12 encoders, reducing embedding processing time under 150ms per resume.",
-          "Application tracking sync: Designed a decoupled database listener to automatically alert applicants on status change.",
+          "Resume Parsing: Implemented server-side text extraction streams to convert raw PDF inputs into standardized plaintext before similarity matching.",
         ],
         decisions:
           "Chose MiniLM-L12 model to run efficiently on standard CPU-bound instances, avoiding the high cost and overhead of dedicated GPU nodes while retaining 92% of the matching accuracy of larger models.",
@@ -358,7 +356,7 @@ export const Projects: React.FC = () => {
                 <div>
                   <h4 className="font-poppins font-bold text-sm text-slate-400 uppercase tracking-wide mb-2.5 flex items-center space-x-2">
                     <Database size={14} className="text-teal" />
-                    <span>Complete Dependencies Stack</span>
+                    <span>Technologies Used</span>
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {activeProject.tags.map((tag, idx) => (
