@@ -24,7 +24,6 @@ interface Block {
   hash: string;
 }
 
-// Simple hash simulator helper (looks like SHA-256)
 const calculateMockHash = (
   index: number,
   prevHash: string,
@@ -33,25 +32,21 @@ const calculateMockHash = (
   difficulty: number
 ): string => {
   const combined = `${index}${prevHash}${merkleRoot}${nonce}${difficulty}`;
-  // Simple custom hashing algorithm to simulate SHA-256
   let hash = 0;
   for (let i = 0; i < combined.length; i++) {
     const char = combined.charCodeAt(i);
     hash = (hash << 5) - hash + char;
-    hash = hash & hash; // Convert to 32bit integer
+    hash = hash & hash;
   }
-  // Convert to hex string and pad/repeat to look like 64-character SHA-256
   const hex = Math.abs(hash).toString(16).repeat(8).substring(0, 64);
-  
-  // Force leading zeros based on difficulty
+
   const prefix = "0".repeat(difficulty);
   return prefix + hex.substring(difficulty);
 };
 
 export const BlockchainDemo: React.FC = () => {
   const { theme } = themeContext();
-  
-  // Starting blockchain
+
   const [blocks, setBlocks] = useState<Block[]>([
     {
       index: 0,
@@ -67,19 +62,16 @@ export const BlockchainDemo: React.FC = () => {
     },
   ]);
 
-  // Mempool transactions
   const [mempool, setMempool] = useState<Transaction[]>([
     { id: "tx_1", from: "Gaurav", to: "Alice", amount: 12.5, fee: 0.05, signature: "ECDSA_secp192v1_sig_9f2" },
     { id: "tx_2", from: "Bob", to: "Charlie", amount: 5.0, fee: 0.12, signature: "ECDSA_secp192v1_sig_a31" },
   ]);
 
-  // Transaction form states
   const [fromUser, setFromUser] = useState("Gaurav");
   const [toUser, setToUser] = useState("User");
   const [txAmount, setTxAmount] = useState(10);
   const [txFee, setTxFee] = useState(0.02);
 
-  // Mining settings
   const [difficulty, setDifficulty] = useState(2);
   const [isMining, setIsMining] = useState(false);
   const [miningNonce, setMiningNonce] = useState(0);
@@ -125,33 +117,29 @@ export const BlockchainDemo: React.FC = () => {
       const requiredPrefix = "0".repeat(difficulty);
 
       interval = window.setInterval(() => {
-        // Run a chunk of hashes per frame to make it fast
         let hash = "";
         let nonce = currentNonce;
-        
+
         for (let i = 0; i < 45; i++) {
           nonce++;
           hash = calculateMockHash(blocks.length, prevBlock.hash, merkleRoot, nonce, difficulty);
-          
+
           if (hash.startsWith(requiredPrefix)) {
             break;
           }
         }
-        
+
         currentNonce = nonce;
         setMiningNonce(currentNonce);
         setMiningHash(hash);
 
-        // Calculate simulated hashes per second
         const elapsed = (Date.now() - startTime) / 1000;
         setHashRate(Math.floor(currentNonce / (elapsed || 0.1)));
 
-        // If target difficulty met
         if (hash.startsWith(requiredPrefix)) {
           setIsMining(false);
           clearInterval(interval);
 
-          // Create new block
           const newBlock: Block = {
             index: blocks.length,
             timestamp: new Date().toISOString().replace("T", " ").substring(0, 19),
@@ -164,14 +152,12 @@ export const BlockchainDemo: React.FC = () => {
           };
 
           setBlocks((prev) => [...prev, newBlock]);
-          
-          // Remove mined txs from mempool
+
           setMempool((prev) => {
             const minedIds = newBlock.transactions.map((tx) => tx.id);
             return prev.filter((tx) => !minedIds.includes(tx.id));
           });
 
-          // Confetti celebration
           confetti({
             particleCount: 80,
             spread: 60,
@@ -192,7 +178,6 @@ export const BlockchainDemo: React.FC = () => {
     setIsMining(true);
   };
 
-  // Check Cryptographic Validity of Chain
   const isChainValid = () => {
     for (let i = 1; i < blocks.length; i++) {
       const current = blocks[i];
@@ -219,13 +204,10 @@ export const BlockchainDemo: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* LEFT: Controls and Mempool (5 cols) */}
           <div className="lg:col-span-5 space-y-8">
-            {/* Transaction Creator Card */}
             <div
-              className={`p-6 rounded-2xl border ${
-                theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
-              }`}
+              className={`p-6 rounded-2xl border ${theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
+                }`}
             >
               <div className="flex items-center space-x-2 mb-6 text-slate-800 dark:text-white">
                 <Plus className="text-teal h-5 w-5" />
@@ -241,11 +223,10 @@ export const BlockchainDemo: React.FC = () => {
                     <select
                       value={fromUser}
                       onChange={(e) => setFromUser(e.target.value)}
-                      className={`w-full p-2.5 rounded-xl border text-sm font-semibold outline-none ${
-                        theme === "dark"
+                      className={`w-full p-2.5 rounded-xl border text-sm font-semibold outline-none ${theme === "dark"
                           ? "bg-navy/85 border-white/10 text-white"
                           : "bg-slate-50 border-black/10 text-slate-800"
-                      }`}
+                        }`}
                     >
                       <option value="Gaurav">Gaurav (Wallet)</option>
                       <option value="Alice">Alice (Wallet)</option>
@@ -259,11 +240,10 @@ export const BlockchainDemo: React.FC = () => {
                     <select
                       value={toUser}
                       onChange={(e) => setToUser(e.target.value)}
-                      className={`w-full p-2.5 rounded-xl border text-sm font-semibold outline-none ${
-                        theme === "dark"
+                      className={`w-full p-2.5 rounded-xl border text-sm font-semibold outline-none ${theme === "dark"
                           ? "bg-navy/85 border-white/10 text-white"
                           : "bg-slate-50 border-black/10 text-slate-800"
-                      }`}
+                        }`}
                     >
                       <option value="User">You (User)</option>
                       <option value="Alice">Alice (Wallet)</option>
@@ -284,11 +264,10 @@ export const BlockchainDemo: React.FC = () => {
                       onChange={(e) => setTxAmount(Number(e.target.value))}
                       min="0.1"
                       step="0.1"
-                      className={`w-full p-2.5 rounded-xl border text-sm font-semibold outline-none ${
-                        theme === "dark"
+                      className={`w-full p-2.5 rounded-xl border text-sm font-semibold outline-none ${theme === "dark"
                           ? "bg-navy/85 border-white/10 text-white"
                           : "bg-slate-50 border-black/10 text-slate-800"
-                      }`}
+                        }`}
                     />
                   </div>
                   <div>
@@ -301,11 +280,10 @@ export const BlockchainDemo: React.FC = () => {
                       onChange={(e) => setTxFee(Number(e.target.value))}
                       min="0.001"
                       step="0.001"
-                      className={`w-full p-2.5 rounded-xl border text-sm font-semibold outline-none ${
-                        theme === "dark"
+                      className={`w-full p-2.5 rounded-xl border text-sm font-semibold outline-none ${theme === "dark"
                           ? "bg-navy/85 border-white/10 text-white"
                           : "bg-slate-50 border-black/10 text-slate-800"
-                      }`}
+                        }`}
                     />
                   </div>
                 </div>
@@ -327,11 +305,9 @@ export const BlockchainDemo: React.FC = () => {
               </div>
             </div>
 
-            {/* Mempool list Card */}
             <div
-              className={`p-6 rounded-2xl border ${
-                theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
-              }`}
+              className={`p-6 rounded-2xl border ${theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
+                }`}
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2 text-slate-800 dark:text-white">
@@ -356,13 +332,12 @@ export const BlockchainDemo: React.FC = () => {
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, scale: 0.9 }}
-                        className={`p-3 rounded-xl border flex items-center justify-between text-xs font-mono ${
-                          idx < 3
+                        className={`p-3 rounded-xl border flex items-center justify-between text-xs font-mono ${idx < 3
                             ? "border-teal/30 bg-teal/5"
                             : theme === "dark"
-                            ? "border-white/5 bg-navy/60"
-                            : "border-black/5 bg-slate-50"
-                        }`}
+                              ? "border-white/5 bg-navy/60"
+                              : "border-black/5 bg-slate-50"
+                          }`}
                       >
                         <div>
                           <div className="font-semibold text-slate-700 dark:text-slate-200">
@@ -382,13 +357,10 @@ export const BlockchainDemo: React.FC = () => {
             </div>
           </div>
 
-          {/* RIGHT: Blockchain Miner panel (7 cols) */}
           <div className="lg:col-span-7 space-y-8">
-            {/* Mining Console Card */}
             <div
-              className={`p-6 rounded-2xl border ${
-                theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
-              }`}
+              className={`p-6 rounded-2xl border ${theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
+                }`}
             >
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div className="flex items-center space-x-2 text-slate-800 dark:text-white">
@@ -411,7 +383,6 @@ export const BlockchainDemo: React.FC = () => {
                 </div>
               </div>
 
-              {/* Miner Terminal Grid */}
               <div className="bg-slate-950 dark:bg-black p-4 rounded-xl font-mono text-xs text-slate-300 min-h-[120px] relative overflow-hidden border border-white/5 mb-6">
                 {isMining ? (
                   <div className="space-y-1">
@@ -420,8 +391,7 @@ export const BlockchainDemo: React.FC = () => {
                     <div className="text-purple">Nonce Counter: {miningNonce}</div>
                     <div className="text-slate-400 truncate">Candidate Hash: {miningHash}</div>
                     <div className="text-slate-500">Hash Rate: {(hashRate / 1000).toFixed(1)} KH/s</div>
-                    
-                    {/* Animated Loader Lines */}
+
                     <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-teal to-purple w-full animate-pulse" />
                   </div>
                 ) : (
@@ -434,7 +404,6 @@ export const BlockchainDemo: React.FC = () => {
               </div>
 
               <div className="flex justify-between items-center">
-                {/* Chain Status Integrity Banner */}
                 <div className="flex items-center space-x-2">
                   {isChainValid() ? (
                     <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-success/5 border border-success/20 text-success">
@@ -460,7 +429,6 @@ export const BlockchainDemo: React.FC = () => {
               </div>
             </div>
 
-            {/* Blockchain horizontal timeline */}
             <div className="space-y-4">
               <h4 className="font-poppins font-bold text-sm text-slate-600 dark:text-slate-400">
                 4. Live Distributed Blockchain Ledgers
@@ -470,11 +438,10 @@ export const BlockchainDemo: React.FC = () => {
                 {blocks.map((block) => (
                   <div
                     key={block.index}
-                    className={`flex-shrink-0 w-64 p-4 rounded-xl border flex flex-col justify-between transition-all ${
-                      theme === "dark"
+                    className={`flex-shrink-0 w-64 p-4 rounded-xl border flex flex-col justify-between transition-all ${theme === "dark"
                         ? "bg-navy/40 border-white/5 hover:border-teal/30"
                         : "bg-white border-black/5 hover:shadow-md"
-                    }`}
+                      }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">

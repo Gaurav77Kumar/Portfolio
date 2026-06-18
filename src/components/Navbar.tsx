@@ -20,7 +20,6 @@ export const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      // Determine active section
       const scrollPosition = window.scrollY + 100;
       for (const link of navLinks) {
         const el = document.getElementById(link.id);
@@ -51,13 +50,12 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled
           ? theme === "dark"
             ? "bg-primary-dark/80 glass-panel border-b border-white/5 py-4"
             : "bg-white/80 glass-panel border-b border-black/5 py-4"
           : "bg-transparent py-6"
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
@@ -78,13 +76,12 @@ export const Navbar: React.FC = () => {
               <button
                 key={link.id}
                 onClick={() => handleScrollTo(link.id)}
-                className={`font-poppins text-sm font-medium transition-colors hover:text-teal ${
-                  activeSection === link.id
+                className={`font-poppins text-sm font-medium transition-colors hover:text-teal ${activeSection === link.id
                     ? "text-teal"
                     : theme === "dark"
-                    ? "text-slate-300"
-                    : "text-slate-600"
-                }`}
+                      ? "text-slate-300"
+                      : "text-slate-600"
+                  }`}
               >
                 {link.label}
               </button>
@@ -94,33 +91,28 @@ export const Navbar: React.FC = () => {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-lg border transition-all ${
-              theme === "dark"
+            className={`p-2 rounded-lg border transition-all ${theme === "dark"
                 ? "border-white/10 hover:bg-white/5 text-teal"
                 : "border-black/10 hover:bg-black/5 text-purple"
-            }`}
+              }`}
             aria-label="Toggle Theme"
           >
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
 
-        {/* Mobile Navigation controls */}
         <div className="flex items-center space-x-4 md:hidden">
-          {/* Theme Toggle for Mobile */}
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-lg border transition-all ${
-              theme === "dark"
+            className={`p-2 rounded-lg border transition-all ${theme === "dark"
                 ? "border-white/10 text-teal"
                 : "border-black/10 text-purple"
-            }`}
+              }`}
             aria-label="Toggle Theme"
           >
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          {/* Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 text-slate-800 dark:text-white"
@@ -131,23 +123,20 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
       {isOpen && (
         <div
-          className={`md:hidden absolute top-full left-0 w-full border-b shadow-lg animate-fade-in ${
-            theme === "dark"
+          className={`md:hidden absolute top-full left-0 w-full border-b shadow-lg animate-fade-in ${theme === "dark"
               ? "bg-primary-dark/95 border-white/5 text-slate-200"
               : "bg-white/95 border-black/5 text-slate-800"
-          }`}
+            }`}
         >
           <div className="flex flex-col p-6 space-y-4">
             {navLinks.map((link) => (
               <button
                 key={link.id}
                 onClick={() => handleScrollTo(link.id)}
-                className={`text-left font-poppins text-lg font-medium py-2 border-b border-transparent hover:border-teal/20 transition-all ${
-                  activeSection === link.id ? "text-teal font-semibold" : ""
-                }`}
+                className={`text-left font-poppins text-lg font-medium py-2 border-b border-transparent hover:border-teal/20 transition-all ${activeSection === link.id ? "text-teal font-semibold" : ""
+                  }`}
               >
                 {link.label}
               </button>

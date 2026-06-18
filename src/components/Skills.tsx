@@ -5,7 +5,7 @@ import { useTheme } from "../context/ThemeContext";
 interface SkillCard {
   name: string;
   icon: React.ReactNode;
-  color: string; // brand color code (hex) for styling
+  color: string;
 }
 
 interface SkillCategory {
@@ -17,7 +17,6 @@ export const Skills: React.FC = () => {
   const { theme } = useTheme();
   const [hoveredCard, setHoveredCard] = useState<string | null>(null); // Track hovered cards as "catIndex-skillIndex"
 
-  // Custom Inline SVGs (w-10 h-10 size) using currentColor for brand coloring
   const logos = {
     java: (
       <svg viewBox="0 0 24 24" className="w-10 h-10" fill="currentColor">
@@ -239,16 +238,13 @@ export const Skills: React.FC = () => {
           <div className="w-16 h-1 bg-teal mx-auto rounded-full" />
         </div>
 
-        {/* Categories Grid - 2 columns on desktop */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-12">
           {skillCategories.map((category, catIdx) => (
             <div key={catIdx} className="flex flex-col">
-              {/* Category Title */}
               <h3 className="font-poppins font-bold text-lg mb-6 text-slate-800 dark:text-white tracking-wide">
                 {category.title}
               </h3>
 
-              {/* Row of Skill Cards */}
               <div className="flex flex-wrap gap-4.5">
                 {category.skills.map((skill, skillIdx) => {
                   const cardKey = `${catIdx}-${skillIdx}`;
@@ -262,23 +258,20 @@ export const Skills: React.FC = () => {
                       whileHover={{ scale: 1.05 }}
                       transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       style={{
-                        // Default border uses a low-opacity version of the brand color (always colorful!)
                         borderColor: isHovered
                           ? skill.color
                           : theme === "dark"
-                          ? `${skill.color}25` // 15% opacity brand border
-                          : `${skill.color}45`, // 27% opacity brand border in light mode
-                        
-                        // Default background uses a 5% opacity version of the brand color (subtle tint!)
+                            ? `${skill.color}25`
+                            : `${skill.color}45`,
+
                         backgroundColor: isHovered
                           ? theme === "dark"
-                            ? `${skill.color}22` // Deep brand color tint on hover
+                            ? `${skill.color}22`
                             : `${skill.color}15`
                           : theme === "dark"
-                          ? `${skill.color}08` // Soft brand color tint by default
-                          : `${skill.color}04`,
-                        
-                        // Color is always brand-colored
+                            ? `${skill.color}08`
+                            : `${skill.color}04`,
+
                         color: skill.color,
 
                         boxShadow: isHovered ? `0 0 15px ${skill.color}35` : "none"
@@ -288,8 +281,8 @@ export const Skills: React.FC = () => {
                       <div className="flex-grow flex items-center justify-center">
                         {skill.icon}
                       </div>
-                      <span 
-                        style={{ 
+                      <span
+                        style={{
                           color: theme === "dark"
                             ? `${skill.color}cc`
                             : `${skill.color}ee`

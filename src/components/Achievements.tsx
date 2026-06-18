@@ -5,21 +5,18 @@ import { Award, Flame } from "lucide-react";
 
 interface HeatmapDay {
   date: string;
-  count: number; // problems solved
+  count: number;
 }
 
 export const Achievements: React.FC = () => {
   const { theme } = useTheme();
   const [hoveredCell, setHoveredCell] = useState<string | null>(null);
 
-  // Generate mock heatmap data for 16 weeks (16 cols x 7 rows = 112 cells)
   const heatmapData: HeatmapDay[] = Array.from({ length: 112 }).map((_, i) => {
-    // Generate dates working backwards from today
     const date = new Date();
     date.setDate(date.getDate() - (111 - i));
     const dateString = date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-    
-    // Random distribution skewing towards some solves
+
     const rand = Math.random();
     let count = 0;
     if (rand > 0.85) count = Math.floor(Math.random() * 4) + 3; // 3-6 solves
@@ -52,24 +49,20 @@ export const Achievements: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
-          {/* LEFT: Smart India Hackathon (6 cols) */}
           <div className="lg:col-span-6 flex">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6 }}
-              className={`p-6 md:p-8 rounded-2xl border flex flex-col justify-between w-full relative overflow-hidden ${
-                theme === "dark"
+              className={`p-6 md:p-8 rounded-2xl border flex flex-col justify-between w-full relative overflow-hidden ${theme === "dark"
                   ? "bg-navy/40 border-white/5"
                   : "bg-white border-black/5 shadow-sm"
-              }`}
+                }`}
             >
-              {/* Decorative Mesh Background */}
               <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-teal/10 blur-[50px] pointer-events-none" />
 
               <div>
-                {/* Header Badge */}
                 <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full border border-purple/35 bg-purple/5 text-purple text-xs font-mono font-bold uppercase tracking-wider mb-6">
                   <Award size={14} />
                   <span>National Winner</span>
@@ -79,12 +72,11 @@ export const Achievements: React.FC = () => {
                   Smart India Hackathon 2025
                 </h3>
                 <p className="text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
-                  Stood **1st Place** among **1 lakh+ registered participants** nationwide. Led a team of developers 
-                  to design and pitch an AI-driven, vector-matching system integrated with multi-language REST pipelines, 
+                  Stood **1st Place** among **1 lakh+ registered participants** nationwide. Led a team of developers
+                  to design and pitch an AI-driven, vector-matching system integrated with multi-language REST pipelines,
                   recognized by ministry delegates.
                 </p>
 
-                {/* Impact Metrics grid */}
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="p-4 rounded-xl bg-slate-100/40 dark:bg-white/5 border border-slate-200 dark:border-white/5">
                     <div className="font-mono text-2xl font-black text-teal">100k+</div>
@@ -116,18 +108,16 @@ export const Achievements: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* RIGHT: DSA & Heatmap (6 cols) */}
           <div className="lg:col-span-6 flex">
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6 }}
-              className={`p-6 md:p-8 rounded-2xl border flex flex-col justify-between w-full ${
-                theme === "dark"
+              className={`p-6 md:p-8 rounded-2xl border flex flex-col justify-between w-full ${theme === "dark"
                   ? "bg-navy/40 border-white/5"
                   : "bg-white border-black/5 shadow-sm"
-              }`}
+                }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-6">
@@ -144,7 +134,6 @@ export const Achievements: React.FC = () => {
                   Regularly practicing algorithms across major competitive programming portals. Focused on trees, graphs, dynamic programming, and hash structures.
                 </p>
 
-                {/* Platforms badges grid */}
                 <div className="grid grid-cols-2 gap-2 mb-8">
                   {platforms.map((plat, idx) => (
                     <div
@@ -157,20 +146,17 @@ export const Achievements: React.FC = () => {
                   ))}
                 </div>
 
-                {/* Heatmap Section */}
                 <div className="space-y-3 relative">
                   <div className="flex justify-between items-baseline">
                     <h4 className="font-mono text-xs font-semibold text-slate-400 uppercase tracking-wide">
                       Problem Solving Activity (Last 4 Months)
                     </h4>
-                    
-                    {/* Tooltip detail */}
+
                     <div className="min-h-[16px] text-[10px] font-mono text-teal">
                       {hoveredCell ? hoveredCell : "Hover cells to view activity"}
                     </div>
                   </div>
 
-                  {/* Heatmap Grid container */}
                   <div className="p-3 rounded-xl bg-slate-900/5 dark:bg-black/20 border border-slate-200 dark:border-white/5 relative">
                     <div className="grid grid-flow-col grid-cols-16 grid-rows-7 gap-1.5 justify-center">
                       {heatmapData.map((day, idx) => (
@@ -185,7 +171,6 @@ export const Achievements: React.FC = () => {
                       ))}
                     </div>
 
-                    {/* Heatmap Legend */}
                     <div className="flex items-center justify-end space-x-1.5 mt-3 text-[9px] font-mono text-slate-400">
                       <span>Less</span>
                       <div className="w-2.5 h-2.5 rounded-[1px] bg-slate-800/40 dark:bg-slate-100" />

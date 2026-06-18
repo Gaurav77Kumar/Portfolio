@@ -4,7 +4,6 @@ import { useTheme } from "../context/ThemeContext";
 import { Mail, FileText, Send, AlertTriangle } from "lucide-react";
 import { z } from "zod";
 
-// GitHub Icon
 const GithubIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     viewBox="0 0 24 24"
@@ -20,7 +19,6 @@ const GithubIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-// LinkedIn Icon
 const LinkedinIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     viewBox="0 0 24 24"
@@ -37,7 +35,6 @@ const LinkedinIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-// X/Twitter Icon
 const XIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     viewBox="0 0 24 24"
@@ -49,7 +46,6 @@ const XIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-// LeetCode Icon
 const LeetCodeIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     viewBox="0 0 24 24"
@@ -61,7 +57,6 @@ const LeetCodeIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-// Zod Validation Schema
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
@@ -73,20 +68,19 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 export const Contact: React.FC = () => {
   const { theme } = useTheme();
-  
+
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
-  
+
   const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error for this field
     if (errors[name as keyof ContactFormData]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -94,10 +88,9 @@ export const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Zod parsing validation
+
     const result = contactSchema.safeParse(formData);
-    
+
     if (!result.success) {
       const fieldErrors: Partial<Record<keyof ContactFormData, string>> = {};
       result.error.issues.forEach((err) => {
@@ -111,16 +104,14 @@ export const Contact: React.FC = () => {
 
     setErrors({});
 
-    // Send email via mailto redirect
     const mailtoLink = `mailto:gauravkumar732006@gmail.com?subject=${encodeURIComponent(
       formData.subject
     )}&body=${encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     )}`;
-    
+
     window.location.href = mailtoLink;
 
-    // Reset form fields
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
 
@@ -144,21 +135,19 @@ export const Contact: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-5xl mx-auto items-start">
-          {/* LEFT: Info card (5 cols) */}
           <div className="lg:col-span-5 space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className={`p-6 rounded-2xl border ${
-                theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
-              }`}
+              className={`p-6 rounded-2xl border ${theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
+                }`}
             >
               <h3 className="font-poppins font-bold text-xl text-slate-800 dark:text-white mb-6">
                 Let's Build Something Together
               </h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-8 leading-relaxed font-sans">
-                Whether you want to discuss cryptographic ledger design, AI microservice integration, or full-stack 
+                Whether you want to discuss cryptographic ledger design, AI microservice integration, or full-stack
                 engineering, I'm always open to talking.
               </p>
 
@@ -172,7 +161,6 @@ export const Contact: React.FC = () => {
                 </a>
               </div>
 
-              {/* Social Channels */}
               <div className="flex items-center space-x-4 mb-8">
                 <a
                   href="https://github.com/Gaurav77Kumar"
@@ -212,7 +200,6 @@ export const Contact: React.FC = () => {
                 </a>
               </div>
 
-              {/* Download Resume Button */}
               <button
                 onClick={handleDownloadResume}
                 className="w-full inline-flex items-center justify-center space-x-2 px-5 py-3.5 rounded-xl border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 hover:scale-[1.01] active:scale-[0.99] transition-all font-poppins font-bold text-sm"
@@ -223,15 +210,13 @@ export const Contact: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* RIGHT: Contact form (7 cols) */}
           <div className="lg:col-span-7">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className={`p-6 rounded-2xl border ${
-                theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
-              }`}
+              className={`p-6 rounded-2xl border ${theme === "dark" ? "bg-navy/40 border-white/5" : "bg-white border-black/5 shadow-sm"
+                }`}
             >
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -242,13 +227,12 @@ export const Contact: React.FC = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className={`w-full p-3 rounded-xl border text-sm font-semibold outline-none transition-all ${
-                        errors.name
+                      className={`w-full p-3 rounded-xl border text-sm font-semibold outline-none transition-all ${errors.name
                           ? "border-red-500 bg-red-500/5"
                           : theme === "dark"
-                          ? "bg-navy/80 border-white/10 text-white focus:border-teal"
-                          : "bg-slate-50 border-black/10 text-slate-800 focus:border-purple"
-                      }`}
+                            ? "bg-navy/80 border-white/10 text-white focus:border-teal"
+                            : "bg-slate-50 border-black/10 text-slate-800 focus:border-purple"
+                        }`}
                     />
                     {errors.name && (
                       <span className="text-red-500 text-xs font-semibold mt-1 block flex items-center space-x-1">
@@ -264,13 +248,12 @@ export const Contact: React.FC = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full p-3 rounded-xl border text-sm font-semibold outline-none transition-all ${
-                        errors.email
+                      className={`w-full p-3 rounded-xl border text-sm font-semibold outline-none transition-all ${errors.email
                           ? "border-red-500 bg-red-500/5"
                           : theme === "dark"
-                          ? "bg-navy/80 border-white/10 text-white focus:border-teal"
-                          : "bg-slate-50 border-black/10 text-slate-800 focus:border-purple"
-                      }`}
+                            ? "bg-navy/80 border-white/10 text-white focus:border-teal"
+                            : "bg-slate-50 border-black/10 text-slate-800 focus:border-purple"
+                        }`}
                     />
                     {errors.email && (
                       <span className="text-red-500 text-xs font-semibold mt-1 block flex items-center space-x-1">
@@ -287,13 +270,12 @@ export const Contact: React.FC = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className={`w-full p-3 rounded-xl border text-sm font-semibold outline-none transition-all ${
-                      errors.subject
+                    className={`w-full p-3 rounded-xl border text-sm font-semibold outline-none transition-all ${errors.subject
                         ? "border-red-500 bg-red-500/5"
                         : theme === "dark"
-                        ? "bg-navy/80 border-white/10 text-white focus:border-teal"
-                        : "bg-slate-50 border-black/10 text-slate-800 focus:border-purple"
-                    }`}
+                          ? "bg-navy/80 border-white/10 text-white focus:border-teal"
+                          : "bg-slate-50 border-black/10 text-slate-800 focus:border-purple"
+                      }`}
                   />
                   {errors.subject && (
                     <span className="text-red-500 text-xs font-semibold mt-1 block flex items-center space-x-1">
@@ -309,13 +291,12 @@ export const Contact: React.FC = () => {
                     rows={5}
                     value={formData.message}
                     onChange={handleChange}
-                    className={`w-full p-3 rounded-xl border text-sm font-semibold outline-none transition-all resize-none ${
-                      errors.message
+                    className={`w-full p-3 rounded-xl border text-sm font-semibold outline-none transition-all resize-none ${errors.message
                         ? "border-red-500 bg-red-500/5"
                         : theme === "dark"
-                        ? "bg-navy/80 border-white/10 text-white focus:border-teal"
-                        : "bg-slate-50 border-black/10 text-slate-800 focus:border-purple"
-                    }`}
+                          ? "bg-navy/80 border-white/10 text-white focus:border-teal"
+                          : "bg-slate-50 border-black/10 text-slate-800 focus:border-purple"
+                      }`}
                   />
                   {errors.message && (
                     <span className="text-red-500 text-xs font-semibold mt-1 block flex items-center space-x-1">
